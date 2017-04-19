@@ -39,12 +39,14 @@ var buyProduct = function() {
     type: "input",
     message: "Which product ID are you interested in purchasing?"
   }).then(function(answer) {
-    var query = "SELECT id, product_name, price FROM products WHERE id = " + answer;
+    var query = "SELECT id, product_name, price FROM products WHERE id = " + answer.product;
     connection.query(query, function(err, res) {
 
 
-      console.log('hi');
-      runSearch();
+      console.log(answer);
+      console.log(query);
+      console.log(res);
+    //   runSearch();
     });
   });
 };
