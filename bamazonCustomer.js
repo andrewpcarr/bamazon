@@ -34,22 +34,48 @@ var useStore = function() {
 };
 
 var buyProduct = function() {
-  inquirer.prompt({
+  inquirer.prompt([{
     name: "product",
     type: "input",
     message: "Which product ID are you interested in purchasing?"
-  }).then(function(answer) {
-    var query = "SELECT id, product_name, price FROM products WHERE id = " + answer.product;
+  }, {
+    name: 'quantity',
+    type: 'input',
+    message: 'How many would you like to buy?'
+  }]).then(function(answer) {
+    var quantity = answer.quantity;
+    var query = "SELECT id, product_name, price, stock_quantity FROM products WHERE id = " + answer.product;
     connection.query(query, function(err, res) {
-
-
-      console.log(answer);
-      console.log(query);
-      console.log(res);
-    //   runSearch();
+        for (i = 0; i < res.length; i++) {
+            console.log("You've selected: " + quantity + ' ' + res[i].product_name);
+            if (quantity <= res[i].stock_quantity) {
+                console.log("======================================");
+                console.log("Your items are in stock. Let's head to checkout!")
+            } else {
+                console.log("I'm sorry. That item is currently out of stock.")
+            }
+        }
     });
   });
 };
+
+// var quantity = function() {
+//   inquirer.prompt({
+//     name: "product",
+//     type: "input",
+//     message: "How many would you like to purchase?"
+//   }).then(function(answer) {
+//     var query = "SELECT id, product_name, price FROM products WHERE id = " + answer.product;
+//     connection.query(query, function(err, res) {
+    
+    
+//     for (i = 0; i < res.length; i++) {
+//         console.log("You've selected: " + res[i].product_name);
+//     }
+//     quantity();
+//     });
+//   });
+// };
 
 // var multiSearch = function() {
 //   var query = "SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1";
